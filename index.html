@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SolarSave Pro - Calcula y Ahorra</title>
+    <title>SolarSave Pro - Calcula tu Ahorro Solar</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -18,42 +18,48 @@
     <nav class="bg-white border-b border-slate-200 py-4 sticky top-0 z-50">
         <div class="max-w-5xl mx-auto px-4 flex justify-between items-center">
             <span class="text-2xl font-black text-emerald-600 tracking-tighter">SolarSave.</span>
-            <a href="#contacto" class="bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-emerald-700 transition">Presupuesto Gratis</a>
+            <a href="#contacto" class="bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-emerald-700 transition shadow-lg shadow-emerald-100">Presupuesto Gratis</a>
         </div>
     </nav>
 
     <main class="max-w-5xl mx-auto px-4 py-12">
         <div class="grid lg:grid-cols-2 gap-12 mb-20">
+            
             <div class="space-y-8">
                 <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-10">
-                        <h2 class="text-xl font-extrabold text-slate-800">Calculadora</h2>
-                        <button onclick="obtenerUbicacion()" class="text-[10px] font-black bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition tracking-widest uppercase shadow-md">📍 Obtener GPS</button>
-                    </div>
+                    <h2 class="text-xl font-extrabold text-slate-800 mb-6">Calculadora Inteligente</h2>
 
-                    <div class="mb-8 p-3 bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-center">
-                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1">Ubicación Detectada</p>
-                        <div id="displayCoords" class="text-sm font-mono text-emerald-600 font-bold">
-                            Esperando señal GPS...
+                    <div class="mb-10 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Tu Ubicación (Para Radiación Solar)</label>
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" id="inputCiudad" placeholder="Ej: Madrid, CDMX, Bogotá..." class="flex-1 p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-bold shadow-sm">
+                            <button onclick="buscarPorCiudad()" class="bg-slate-900 text-white px-5 py-3 rounded-xl hover:bg-black transition text-sm shadow-md">🔍</button>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-4">
+                            <button onclick="obtenerUbicacion()" class="text-[10px] font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-tight flex items-center gap-1">
+                                📍 Usar mi GPS
+                            </button>
+                            <div id="displayCoords" class="text-[10px] font-mono text-slate-400 italic">Esperando ubicación...</div>
                         </div>
                     </div>
 
                     <div class="space-y-12">
                         <div>
                             <div class="flex justify-between mb-4">
-                                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest text-slate-400">Gasto Mensual</span>
-                                <span class="text-2xl font-black text-emerald-600">$<span id="labelGasto">150</span></span>
+                                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Gasto Mensual</span>
+                                <span class="text-2xl font-black text-emerald-600"><span class="symbol">$</span><span id="labelGasto">150</span></span>
                             </div>
                             <input type="range" min="20" max="2000" value="150" class="slider" id="inputGasto">
                         </div>
                         <div>
                             <div class="flex justify-between mb-4 text-sm">
-                                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest text-slate-400">Radiación Solar</span>
+                                <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Radiación Solar</span>
                                 <span class="text-2xl font-black text-emerald-600"><span id="labelSol">4.5</span> <small class="text-slate-400 font-normal">HSP</small></span>
                             </div>
                             <input type="range" min="1" max="8" step="0.1" value="4.5" class="slider" id="inputSol">
                         </div>
                         <div class="pt-4 border-t border-slate-100">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3 text-center">Selecciona tu moneda</label>
                             <select id="currencySelector" onchange="calcular()" class="w-full bg-slate-50 border border-slate-200 text-sm font-bold rounded-xl px-4 py-3 outline-none text-center">
                                 <option value="USD" data-symbol="$" data-kwh="0.15">Dólar (USD) - 0.15/kWh</option>
                                 <option value="EUR" data-symbol="€" data-kwh="0.25">Euro (EUR) - 0.25/kWh</option>
@@ -66,105 +72,136 @@
 
             <div class="space-y-6">
                 <div class="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl"></div>
                     <p class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Ahorro proyectado (25 años)</p>
                     <div class="flex items-baseline gap-2 mb-10">
-                        <span class="text-4xl font-light text-emerald-500">$</span>
+                        <span class="text-4xl font-light text-emerald-500 symbol">$</span>
                         <span class="text-7xl font-black tracking-tighter" id="resAhorroTotal">0</span>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-white/5 border border-white/10 p-5 rounded-3xl text-center">
-                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1 text-slate-400">Recuperación</span>
-                            <span class="text-2xl font-bold"><span id="resROI">0</span> <small class="text-xs opacity-50 text-slate-400">años</small></span>
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Recuperación</span>
+                            <span class="text-2xl font-bold"><span id="resROI">0</span> <small class="text-xs opacity-50 font-normal">años</small></span>
                         </div>
                         <div class="bg-white/5 border border-white/10 p-5 rounded-3xl text-center">
-                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1 text-slate-400">Ahorro Anual</span>
-                            <span class="text-2xl font-bold">$<span id="resAhorroAnual">0</span></span>
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Ahorro Anual</span>
+                            <span class="text-2xl font-bold"><span class="symbol">$</span><span id="resAhorroAnual">0</span></span>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200">
-                    <canvas id="graficaAhorro" height="160"></canvas>
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200 h-[280px]">
+                    <canvas id="graficaAhorro"></canvas>
                 </div>
             </div>
         </div>
 
-        <section class="mb-20">
-            <h2 class="text-[12px] font-black text-center mb-8 italic text-slate-400 uppercase tracking-[0.3em]">Equipamiento Recomendado</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 text-center shadow-sm">
-                    <div class="text-3xl mb-3">💡</div>
-                    <h3 class="font-bold text-slate-700 text-sm mb-2">Focos Solares</h3>
-                    <a href="https://amazon.com" target="_blank" class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest border border-emerald-100 px-4 py-2 rounded-lg inline-block hover:bg-emerald-50 transition">Comprar en Amazon</a>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 text-center shadow-sm">
-                    <div class="text-3xl mb-3">🔋</div>
-                    <h3 class="font-bold text-slate-700 text-sm mb-2">Batería Solar</h3>
-                    <a href="https://amazon.com" target="_blank" class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest border border-emerald-100 px-4 py-2 rounded-lg inline-block hover:bg-emerald-50 transition">Comprar en Amazon</a>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 text-center shadow-sm">
-                    <div class="text-3xl mb-3">📦</div>
-                    <h3 class="font-bold text-slate-700 text-sm mb-2">Kit Panel 100W</h3>
-                    <a href="https://amazon.com" target="_blank" class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest border border-emerald-100 px-4 py-2 rounded-lg inline-block hover:bg-emerald-50 transition">Comprar en Amazon</a>
-                </div>
+<section class="mb-20">
+    <h2 class="text-[12px] font-black text-center mb-8 italic text-slate-400 uppercase tracking-[0.3em]">Equipamiento Recomendado</h2>
+    <div class="grid md:grid-cols-3 gap-6 text-center">
+        
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col items-center">
+            <div class="h-32 w-full mb-4 flex items-center justify-center">
+                <img src="data:image/jpeg;base64,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" alt="Iluminación Solar" class="h-full object-contain">
             </div>
-        </section>
+            <h3 class="font-bold text-slate-700 text-sm mb-2">Iluminacion Solar</h3>
+            <a href="https://www.mercadolibre.com.ar/kit-solar-inversor-1000w-220v-panel-energia-casa-campo-m3/up/MLAU173650367?pdp_filters=item_id%3AMLA822772592&from=gshop&matt_tool=70882460&matt_word=&matt_source=google&matt_campaign_id=23390548526&matt_ad_group_id=189479829983&matt_match_type=&matt_network=g&matt_device=c&matt_creative=789984776548&matt_keyword=&matt_ad_position=&matt_ad_type=pla&matt_merchant_id=5525363742&matt_product_id=MLAU173650367&matt_product_partition_id=2388138833190&matt_target_id=pla-2388138833190&cq_src=google_ads&cq_cmp=23390548526&cq_net=g&cq_plt=gp&cq_med=pla&gad_source=1&gad_campaignid=23390548526&gbraid=0AAAAAD01zQZucg9d_hMPcYuD15i3gaAoo&gclid=CjwKCAiAh5XNBhAAEiwA_Bu8FVtK0fIobaKGKGjdS6mqe8AccktkJEJnBrtOHGJvGJeZj4oQXTMQJRoC_ggQAvD_BwE" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en Mercado Libre</a>
+        </div>
 
-        <section id="contacto" class="bg-emerald-600 rounded-[3rem] p-10 text-center max-w-4xl mx-auto text-white shadow-xl">
-            <h2 class="text-3xl font-black mb-4">¿Buscas una instalación profesional?</h2>
-            <p class="mb-8 opacity-90">Recibe presupuestos reales de expertos certificados.</p>
-            <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input type="text" name="name" placeholder="Tu nombre" required class="p-4 rounded-xl text-slate-900 outline-none">
-                <input type="email" name="email" placeholder="Tu email" required class="p-4 rounded-xl text-slate-900 outline-none">
-                <input type="text" name="ciudad" placeholder="Tu Ciudad" required class="md:col-span-2 p-4 rounded-xl text-slate-900 outline-none">
-                <button type="submit" class="md:col-span-2 bg-slate-900 text-white font-black py-4 rounded-xl hover:bg-black transition uppercase tracking-widest">Enviar Solicitud</button>
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col items-center">
+            <div class="h-32 w-full mb-4 flex items-center justify-center">
+                <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRrYNsCNE4sKsxvULGdzduvcjUVmB-ElC8Tntple1h82vfZiH1gYeNNhgPnoc-CyD6sq30xUYw2ZIQFw124ZHerjcZLoAA_PbALQ2zERIbG2kxZkkCrXHeRzA&usqp=CAc" alt="Estación de Energía" class="h-full object-contain">
+            </div>
+            <h3 class="font-bold text-slate-700 text-sm mb-2">Estación de Energía</h3>
+            <a href="TU_ENLACE_AFILIADO_2" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en Amazon</a>
+        </div>
+
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition flex flex-col items-center">
+            <div class="h-32 w-full mb-4 flex items-center justify-center">
+                <img src="data:image/jpeg;base64,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" alt="Kit Panel 100W" class="h-full object-contain">
+            </div>
+            <h3 class="font-bold text-slate-700 text-sm mb-2">Kit Panel 100W</h3>
+            <a href="TU_ENLACE_AFILIADO_3" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en Amazon</a>
+        </div>
+
+    </div>
+</section>
+
+        <section id="contacto" class="bg-emerald-600 rounded-[3.5rem] p-12 text-center max-w-4xl mx-auto text-white shadow-2xl shadow-emerald-200">
+            <h2 class="text-3xl font-black mb-4">¿Quieres una instalación real?</h2>
+            <p class="mb-10 opacity-90 font-medium">Recibe presupuestos de instaladores certificados en tu zona.</p>
+            <form action="https://formspree.io/f/mwvndoqv" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" name="name" placeholder="Nombre completo" required class="p-5 rounded-2xl text-slate-900 outline-none shadow-inner">
+                <input type="email" name="email" placeholder="Email de contacto" required class="p-5 rounded-2xl text-slate-900 outline-none shadow-inner">
+                <input type="text" name="ciudad" placeholder="Ciudad y País" required class="md:col-span-2 p-5 rounded-2xl text-slate-900 outline-none shadow-inner">
+                <button type="submit" class="md:col-span-2 bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-black transition shadow-xl uppercase tracking-widest text-sm">Solicitar Estudio Gratuito</button>
             </form>
         </section>
     </main>
 
+    <footer class="py-12 text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em]">
+        <p>© 2026 SolarSave. Todos los derechos reservados.</p>
+    </footer>
+
     <script>
         const inputGasto = document.getElementById('inputGasto');
         const inputSol = document.getElementById('inputSol');
+        const currencySelector = document.getElementById('currencySelector');
         const displayCoords = document.getElementById('displayCoords');
         let chart;
 
-        function obtenerUbicacion() {
-            displayCoords.innerText = "Localizando...";
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const lat = pos.coords.latitude;
-                    const lon = pos.coords.longitude;
-                    
-                    // Actualizamos el cuadro de texto
-                    displayCoords.innerText = `LAT: ${lat.toFixed(4)} | LON: ${lon.toFixed(4)}`;
-                    displayCoords.classList.add('text-emerald-600');
-
-                    try {
-                        const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=shortwave_radiation_sum&timezone=auto`);
-                        const data = await res.json();
-                        const hsp = (data.daily.shortwave_radiation_sum[0] / 3.6).toFixed(1);
-                        inputSol.value = hsp;
-                        calcular();
-                    } catch (e) {
-                        displayCoords.innerText = "Error al conectar con el clima";
-                    }
-                }, () => {
-                    displayCoords.innerText = "GPS denegado por el usuario";
-                });
-            } else {
-                displayCoords.innerText = "Tu navegador no soporta GPS";
-            }
+        // --- LÓGICA DE UBICACIÓN ---
+        async function buscarPorCiudad() {
+            const ciudad = document.getElementById('inputCiudad').value;
+            if (!ciudad) return;
+            displayCoords.innerText = "Buscando...";
+            try {
+                const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(ciudad)}&count=1&language=es&format=json`);
+                const geoData = await geoRes.json();
+                if (geoData.results && geoData.results.length > 0) {
+                    actualizarConCoords(geoData.results[0].latitude, geoData.results[0].longitude, geoData.results[0].name);
+                } else {
+                    displayCoords.innerText = "No encontrada.";
+                }
+            } catch (e) { displayCoords.innerText = "Error API."; }
         }
 
+        function obtenerUbicacion() {
+            displayCoords.innerText = "Pidiendo GPS...";
+            navigator.geolocation.getCurrentPosition(
+                (pos) => actualizarConCoords(pos.coords.latitude, pos.coords.longitude, "Mi Ubicación"),
+                (err) => { displayCoords.innerText = "GPS falló. Usa el buscador."; displayCoords.classList.add('text-red-500'); },
+                { timeout: 10000 }
+            );
+        }
+
+        async function actualizarConCoords(lat, lon, nombre) {
+            displayCoords.innerText = `${nombre} (📍 ${lat.toFixed(2)}, ${lon.toFixed(2)})`;
+            displayCoords.classList.remove('text-red-500');
+            displayCoords.classList.add('text-emerald-600');
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=shortwave_radiation_sum&timezone=auto`);
+                const data = await res.json();
+                const hsp = (data.daily.shortwave_radiation_sum[0] / 3.6).toFixed(1);
+                inputSol.value = hsp;
+                calcular();
+            } catch (e) { displayCoords.innerText = "Error datos solares."; }
+        }
+
+        // --- LÓGICA DE CÁLCULO ---
         function calcular() {
             const gasto = parseFloat(inputGasto.value);
             const sol = parseFloat(inputSol.value);
-            const precioKWh = 0.15; // Precio base configurable
+            const opt = currencySelector.options[currencySelector.selectedIndex];
+            const symbol = opt.dataset.symbol;
+            const precioKWh = parseFloat(opt.dataset.kwh);
 
+            document.querySelectorAll('.symbol').forEach(el => el.innerText = symbol);
             document.getElementById('labelGasto').innerText = gasto.toLocaleString();
             document.getElementById('labelSol').innerText = sol;
 
             const ahorroAnual = gasto * 12 * 0.95; 
-            const costoInstalacion = (gasto / (30 * sol * precioKWh)) * 1150;
+            const capacidadSugeridaKw = (gasto / (30 * sol * precioKWh));
+            const costoInstalacion = capacidadSugeridaKw * 1150; 
             const roi = costoInstalacion / ahorroAnual;
 
             document.getElementById('resAhorroTotal').innerText = Math.round(ahorroAnual * 25).toLocaleString();
@@ -182,21 +219,29 @@
                 data: {
                     labels: ['0', '5', '10', '15', '20', '25'],
                     datasets: [{
+                        label: 'Ahorro Neto',
                         data: [0, 5, 10, 15, 20, 25].map(y => (ahorro * y) - costo),
                         borderColor: '#10b981',
                         borderWidth: 4,
                         fill: true,
                         backgroundColor: 'rgba(16, 185, 129, 0.05)',
                         tension: 0.4,
-                        pointRadius: 0
+                        pointRadius: 2
                     }]
                 },
-                options: { plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
+                options: { 
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } }, 
+                    scales: { 
+                        y: { border: { display: false }, grid: { color: '#f1f5f9' } }, 
+                        x: { grid: { display: false } } 
+                    } 
+                }
             });
         }
 
-        inputGasto.addEventListener('input', calcular);
-        inputSol.addEventListener('input', calcular);
+        [inputGasto, inputSol].forEach(i => i.addEventListener('input', calcular));
         calcular();
     </script>
 </body>
