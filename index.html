@@ -26,9 +26,14 @@
         <div class="grid lg:grid-cols-2 gap-12 mb-20">
             <div class="space-y-8">
                 <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-center mb-10">
+                    <div class="flex justify-between items-start mb-10">
                         <h2 class="text-xl font-extrabold">Calculadora</h2>
-                        <button onclick="obtenerUbicacion()" class="text-[10px] font-black bg-slate-100 text-slate-600 px-3 py-2 rounded-lg hover:bg-emerald-100 hover:text-emerald-700 transition tracking-widest uppercase">📍 GPS Auto</button>
+                        <div class="text-right">
+                            <button onclick="obtenerUbicacion()" class="text-[10px] font-black bg-slate-100 text-slate-600 px-3 py-2 rounded-lg hover:bg-emerald-100 hover:text-emerald-700 transition tracking-widest uppercase mb-2">📍 GPS Auto</button>
+                            <div id="coordsBox" class="hidden text-[9px] font-mono text-slate-400 bg-slate-50 px-2 py-1 rounded border border-slate-100">
+                                Lat: <span id="lat">0</span> | Lon: <span id="lon">0</span>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="space-y-12">
@@ -83,58 +88,30 @@
             </div>
         </div>
 
-        <section class="mb-20">
-            <h2 class="text-2xl font-black text-center mb-8 italic text-slate-400">¿Quieres empezar poco a poco?</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
-                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">💡</div>
-                    <h3 class="font-bold text-sm mb-2">Luces Solares Jardín</h3>
-                    <p class="text-xs text-slate-500 mb-4">Ahorra en iluminación exterior con kits fáciles de instalar.</p>
-                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
-                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">🔋</div>
-                    <h3 class="font-bold text-sm mb-2">PowerBank Solar</h3>
-                    <p class="text-xs text-slate-500 mb-4">Carga tu móvil gratis con energía del sol en cualquier lugar.</p>
-                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
-                </div>
-                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
-                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">📦</div>
-                    <h3 class="font-bold text-sm mb-2">Kit Panel 100W</h3>
-                    <p class="text-xs text-slate-500 mb-4">Kit inicial para alimentar dispositivos pequeños.</p>
-                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
-                </div>
-            </div>
-        </section>
-
-        <section id="contacto" class="bg-emerald-50 rounded-[3rem] p-12 text-center max-w-3xl mx-auto">
-            <h2 class="text-3xl font-black mb-4">¿Te interesa una instalación profesional?</h2>
-            <p class="text-slate-600 mb-8 font-medium">Déjanos tus datos y un experto certificado de tu zona te enviará un presupuesto real sin compromiso.</p>
-            
-            <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-                <input type="text" name="name" placeholder="Tu nombre" required class="p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
-                <input type="email" name="email" placeholder="Tu email" required class="p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
-                <input type="text" name="ciudad" placeholder="Ciudad y País" required class="md:col-span-2 p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
-                <button type="submit" class="md:col-span-2 bg-emerald-600 text-white font-black py-4 rounded-2xl hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">PEDIR ESTUDIO PERSONALIZADO</button>
-            </form>
-            <p class="text-[10px] text-slate-400 mt-6 uppercase tracking-widest font-bold">Respetamos tu privacidad al 100%</p>
-        </section>
-    </main>
-
-    <footer class="py-10 text-center text-slate-400 text-xs">
-        <p>© 2026 SolarSave - Herramienta educativa.</p>
-    </footer>
+        </main>
 
     <script>
         const inputGasto = document.getElementById('inputGasto');
         const inputSol = document.getElementById('inputSol');
         const currencySelector = document.getElementById('currencySelector');
+        // Referencias para las coordenadas
+        const coordsBox = document.getElementById('coordsBox');
+        const latSpan = document.getElementById('lat');
+        const lonSpan = document.getElementById('lon');
         let chart;
 
         async function obtenerUbicacion() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (pos) => {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&daily=shortwave_radiation_sum&timezone=auto`);
+                    const lat = pos.coords.latitude;
+                    const lon = pos.coords.longitude;
+
+                    // Mostramos el cuadro de coordenadas en la UI
+                    coordsBox.classList.remove('hidden');
+                    latSpan.innerText = lat.toFixed(4);
+                    lonSpan.innerText = lon.toFixed(4);
+
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=shortwave_radiation_sum&timezone=auto`);
                     const data = await res.json();
                     const hsp = (data.daily.shortwave_radiation_sum[0] / 3.6).toFixed(1);
                     inputSol.value = hsp;
@@ -155,7 +132,7 @@
             document.getElementById('labelSol').innerText = sol;
 
             const capacidadSugeridaKw = (gasto / (30 * sol * precioKWh));
-            const costoInstalacion = capacidadSugeridaKw * 1100; // Costo promedio estimado
+            const costoInstalacion = capacidadSugeridaKw * 1100; 
             const ahorroAnual = gasto * 12 * 0.95; 
             const roi = costoInstalacion / ahorroAnual;
 
