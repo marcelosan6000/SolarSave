@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarSave Pro - Calcula y Ahorra</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .slider { appearance: none; width: 100%; height: 6px; background: #e2e8f0; outline: none; border-radius: 10px; }
+        .slider::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #10b981; cursor: pointer; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 antialiased">
+
+    <nav class="bg-white border-b border-slate-200 py-4 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 flex justify-between items-center">
+            <span class="text-2xl font-black text-emerald-600 tracking-tighter">SolarSave.</span>
+            <a href="#contacto" class="bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:bg-emerald-700 transition">Presupuesto Gratis</a>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+        <div class="grid lg:grid-cols-2 gap-12 mb-20">
+            <div class="space-y-8">
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center mb-10">
+                        <h2 class="text-xl font-extrabold">Calculadora</h2>
+                        <button onclick="obtenerUbicacion()" class="text-[10px] font-black bg-slate-100 text-slate-600 px-3 py-2 rounded-lg hover:bg-emerald-100 hover:text-emerald-700 transition tracking-widest uppercase">📍 GPS Auto</button>
+                    </div>
+
+                    <div class="space-y-12">
+                        <div>
+                            <div class="flex justify-between mb-4">
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Gasto Mensual</span>
+                                <span class="text-2xl font-black text-emerald-600"><span class="symbol">$</span><span id="labelGasto">150</span></span>
+                            </div>
+                            <input type="range" min="20" max="2000" value="150" class="slider" id="inputGasto">
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-4 text-sm">
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-widest">Radiación Solar</span>
+                                <span class="text-2xl font-black text-emerald-600"><span id="labelSol">4.5</span> <small class="text-slate-400 font-normal">HSP</small></span>
+                            </div>
+                            <input type="range" min="1" max="8" step="0.1" value="4.5" class="slider" id="inputSol">
+                        </div>
+                        <div class="pt-4 border-t border-slate-100">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3 text-center">Selecciona tu moneda</label>
+                            <select id="currencySelector" onchange="calcular()" class="w-full bg-slate-50 border border-slate-200 text-sm font-bold rounded-xl px-4 py-3 outline-none text-center">
+                                <option value="USD" data-symbol="$" data-kwh="0.15">Dólar (USD) - 0.15/kWh</option>
+                                <option value="EUR" data-symbol="€" data-kwh="0.25">Euro (EUR) - 0.25/kWh</option>
+                                <option value="MXN" data-symbol="$" data-kwh="3.50">Peso Mexicano (MXN) - 3.50/kWh</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/20 rounded-full blur-3xl"></div>
+                    <p class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Ahorro proyectado (25 años)</p>
+                    <div class="flex items-baseline gap-2 mb-10">
+                        <span class="text-4xl font-light text-emerald-500 symbol">$</span>
+                        <span class="text-7xl font-black tracking-tighter" id="resAhorroTotal">0</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Recuperación</span>
+                            <span class="text-2xl font-bold"><span id="resROI">0</span> <small class="text-sm font-normal opacity-50">años</small></span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-5 rounded-3xl">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Ahorro Anual</span>
+                            <span class="text-2xl font-bold"><span class="symbol">$</span><span id="resAhorroAnual">0</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200">
+                    <canvas id="graficaAhorro" height="160"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <section class="mb-20">
+            <h2 class="text-2xl font-black text-center mb-8 italic text-slate-400">¿Quieres empezar poco a poco?</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">💡</div>
+                    <h3 class="font-bold text-sm mb-2">Luces Solares Jardín</h3>
+                    <p class="text-xs text-slate-500 mb-4">Ahorra en iluminación exterior con kits fáciles de instalar.</p>
+                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">🔋</div>
+                    <h3 class="font-bold text-sm mb-2">PowerBank Solar</h3>
+                    <p class="text-xs text-slate-500 mb-4">Carga tu móvil gratis con energía del sol en cualquier lugar.</p>
+                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <div class="w-full h-32 bg-slate-100 rounded-2xl mb-4 flex items-center justify-center text-3xl">📦</div>
+                    <h3 class="font-bold text-sm mb-2">Kit Panel 100W</h3>
+                    <p class="text-xs text-slate-500 mb-4">Kit inicial para alimentar dispositivos pequeños.</p>
+                    <a href="https://amazon.com" target="_blank" class="block text-center text-xs font-bold text-emerald-600 py-2 border border-emerald-100 rounded-xl hover:bg-emerald-50">Ver en Amazon →</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="contacto" class="bg-emerald-50 rounded-[3rem] p-12 text-center max-w-3xl mx-auto">
+            <h2 class="text-3xl font-black mb-4">¿Te interesa una instalación profesional?</h2>
+            <p class="text-slate-600 mb-8 font-medium">Déjanos tus datos y un experto certificado de tu zona te enviará un presupuesto real sin compromiso.</p>
+            
+            <form action="https://formspree.io/f/TU_ID_AQUI" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <input type="text" name="name" placeholder="Tu nombre" required class="p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
+                <input type="email" name="email" placeholder="Tu email" required class="p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
+                <input type="text" name="ciudad" placeholder="Ciudad y País" required class="md:col-span-2 p-4 rounded-2xl border-none outline-none ring-2 ring-emerald-100 focus:ring-emerald-500 transition shadow-sm">
+                <button type="submit" class="md:col-span-2 bg-emerald-600 text-white font-black py-4 rounded-2xl hover:bg-emerald-700 transition shadow-lg shadow-emerald-200">PEDIR ESTUDIO PERSONALIZADO</button>
+            </form>
+            <p class="text-[10px] text-slate-400 mt-6 uppercase tracking-widest font-bold">Respetamos tu privacidad al 100%</p>
+        </section>
+    </main>
+
+    <footer class="py-10 text-center text-slate-400 text-xs">
+        <p>© 2026 SolarSave - Herramienta educativa.</p>
+    </footer>
+
+    <script>
+        const inputGasto = document.getElementById('inputGasto');
+        const inputSol = document.getElementById('inputSol');
+        const currencySelector = document.getElementById('currencySelector');
+        let chart;
+
+        async function obtenerUbicacion() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(async (pos) => {
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&daily=shortwave_radiation_sum&timezone=auto`);
+                    const data = await res.json();
+                    const hsp = (data.daily.shortwave_radiation_sum[0] / 3.6).toFixed(1);
+                    inputSol.value = hsp;
+                    calcular();
+                });
+            }
+        }
+
+        function calcular() {
+            const gasto = parseFloat(inputGasto.value);
+            const sol = parseFloat(inputSol.value);
+            const opt = currencySelector.options[currencySelector.selectedIndex];
+            const symbol = opt.dataset.symbol;
+            const precioKWh = parseFloat(opt.dataset.kwh);
+
+            document.querySelectorAll('.symbol').forEach(el => el.innerText = symbol);
+            document.getElementById('labelGasto').innerText = gasto.toLocaleString();
+            document.getElementById('labelSol').innerText = sol;
+
+            const capacidadSugeridaKw = (gasto / (30 * sol * precioKWh));
+            const costoInstalacion = capacidadSugeridaKw * 1100; // Costo promedio estimado
+            const ahorroAnual = gasto * 12 * 0.95; 
+            const roi = costoInstalacion / ahorroAnual;
+
+            document.getElementById('resAhorroTotal').innerText = Math.round(ahorroAnual * 25).toLocaleString();
+            document.getElementById('resAhorroAnual').innerText = Math.round(ahorroAnual).toLocaleString();
+            document.getElementById('resROI').innerText = roi.toFixed(1);
+
+            renderChart(ahorroAnual, costoInstalacion);
+        }
+
+        function renderChart(ahorro, costo) {
+            const ctx = document.getElementById('graficaAhorro').getContext('2d');
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['0', '5', '10', '15', '20', '25'],
+                    datasets: [{
+                        label: 'Retorno Neto',
+                        data: [0, 5, 10, 15, 20, 25].map(y => (ahorro * y) - costo),
+                        borderColor: '#10b981',
+                        borderWidth: 4,
+                        pointRadius: 0,
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true, tension: 0.4
+                    }]
+                },
+                options: { 
+                    plugins: { legend: { display: false } },
+                    scales: { y: { display: false }, x: { grid: { display: false } } }
+                }
+            });
+        }
+
+        [inputGasto, inputSol].forEach(i => i.addEventListener('input', calcular));
+        calcular();
+    </script>
+</body>
+</html>
