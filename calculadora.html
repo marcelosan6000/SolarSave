@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Paneles Solares — ¿Cuántos Paneles Necesito? | SolarSave</title>
+    <meta name="description" content="Calcula cuántos paneles solares necesitas según tu consumo eléctrico y la radiación solar de tu ciudad. Resultado instantáneo y gratuito.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://marcelosan6000.github.io/SolarSave/calculadora.html">
+    <meta property="og:title" content="¿Cuántos Paneles Solares Necesito? Calculadora Gratis | SolarSave">
+    <meta property="og:description" content="Ingresa tu ciudad y consumo para saber exactamente cuántos paneles solares necesitas instalar.">
+    <meta property="og:url" content="https://marcelosan6000.github.io/SolarSave/calculadora.html">
+    <meta property="og:type" content="website">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Calculadora de Paneles Solares",
+      "url": "https://marcelosan6000.github.io/SolarSave/calculadora.html",
+      "description": "Calcula cuántos paneles solares necesitas según tu ciudad y consumo mensual.",
+      "applicationCategory": "UtilityApplication",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "inLanguage": "es"
+    }
+    </script>
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Cuántos paneles solares necesito para mi casa?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Depende de tu consumo mensual en kWh y de las horas de sol de tu zona. Un hogar con consumo de 300 kWh/mes en una ciudad con 5 horas de sol al día necesita aproximadamente 4 a 6 paneles de 400W."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué es la radiación solar HSP?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "HSP son las Horas de Sol Pico, que miden la cantidad de energía solar disponible en una ubicación. A mayor HSP, menos paneles necesitas para generar la misma energía."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; scroll-behavior: smooth; }
+        .slider { appearance: none; width: 100%; height: 6px; background: #e2e8f0; outline: none; border-radius: 10px; }
+        .slider::-webkit-slider-thumb { appearance: none; width: 22px; height: 22px; background: #10b981; cursor: pointer; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .panel-icon { transition: all 0.3s ease; }
+        .panel-grid { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+    </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 antialiased">
+
+    <!-- NAV -->
+    <nav class="bg-white border-b border-slate-200 py-4 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-black text-emerald-600 tracking-tighter">SolarSave.</a>
+            <div class="flex gap-3">
+                <a href="index.html" class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition px-3 py-2">Calculadora</a>
+                <a href="calculadora.html" class="bg-emerald-600 text-white px-5 py-2 rounded-xl font-bold text-sm">Paneles</a>
+                <a href="productos.html" class="text-sm font-bold text-slate-500 hover:text-emerald-600 transition px-3 py-2">Productos</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 py-12">
+
+        <h1 class="text-3xl font-black text-slate-800 text-center mb-2">¿Cuántos Paneles Solares Necesito?</h1>
+        <p class="text-center text-slate-500 text-sm mb-12">Ingresa tu ciudad y consumo para obtener tu cálculo personalizado</p>
+
+        <div class="grid lg:grid-cols-2 gap-10 mb-16">
+
+            <!-- COLUMNA IZQUIERDA: Inputs -->
+            <div class="space-y-6">
+
+                <!-- Ubicación -->
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200">
+                    <h2 class="text-lg font-extrabold text-slate-800 mb-5">📍 Tu Ubicación</h2>
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-100">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Ciudad (para calcular radiación solar real)</label>
+                        <div class="flex gap-2 mb-4">
+                            <input type="text" id="inputCiudad" placeholder="Ej: Buenos Aires, Lima, Madrid..."
+                                class="flex-1 p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-bold shadow-sm"
+                                aria-label="Escribe tu ciudad">
+                            <button onclick="buscarCiudad()"
+                                class="bg-slate-900 text-white px-5 py-3 rounded-xl hover:bg-black transition text-sm shadow-md">🔍</button>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-slate-200 pt-4">
+                            <button onclick="usarGPS()" class="text-[10px] font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-tight flex items-center gap-1">
+                                📍 Usar mi GPS
+                            </button>
+                            <div id="displayCoords" class="text-[10px] font-mono text-slate-400 italic">Esperando ubicación...</div>
+                        </div>
+                        <!-- Indicador de HSP -->
+                        <div id="hspBox" class="hidden mt-4 p-3 bg-emerald-50 rounded-xl border border-emerald-100 text-center">
+                            <span class="text-[10px] font-black text-emerald-600 uppercase tracking-widest block mb-1">Radiación Solar en tu zona</span>
+                            <span class="text-2xl font-black text-emerald-700"><span id="hspValor">—</span> <small class="text-sm font-normal text-slate-400">HSP</small></span>
+                            <p class="text-[10px] text-slate-400 mt-1">Horas de Sol Pico por día</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Consumo y configuración -->
+                <div class="bg-white p-8 rounded-[2.5rem] shadow-sm border border-slate-200 space-y-8">
+                    <h2 class="text-lg font-extrabold text-slate-800">⚡ Tu Consumo</h2>
+
+                    <!-- Consumo mensual kWh -->
+                    <div>
+                        <div class="flex justify-between mb-3">
+                            <label class="text-sm font-bold text-slate-400 uppercase tracking-widest">Consumo mensual</label>
+                            <span class="text-2xl font-black text-emerald-600"><span id="labelConsumo">300</span> <small class="text-sm font-normal text-slate-400">kWh/mes</small></span>
+                        </div>
+                        <input type="range" min="50" max="3000" step="10" value="300" class="slider" id="inputConsumo" oninput="actualizar()">
+                        <p class="text-[10px] text-slate-400 mt-2">💡 Revisa tu factura de luz para encontrar este dato</p>
+                    </div>
+
+                    <!-- Potencia del panel -->
+                    <div>
+                        <div class="flex justify-between mb-3">
+                            <label class="text-sm font-bold text-slate-400 uppercase tracking-widest">Potencia del panel</label>
+                            <span class="text-2xl font-black text-emerald-600"><span id="labelPotencia">400</span> <small class="text-sm font-normal text-slate-400">W</small></span>
+                        </div>
+                        <input type="range" min="100" max="700" step="50" value="400" class="slider" id="inputPotencia" oninput="actualizar()">
+                        <p class="text-[10px] text-slate-400 mt-2">Los paneles más comunes en AliExpress son 400W–550W</p>
+                    </div>
+
+                    <!-- Eficiencia del sistema -->
+                    <div>
+                        <div class="flex justify-between mb-3">
+                            <label class="text-sm font-bold text-slate-400 uppercase tracking-widest">Eficiencia del sistema</label>
+                            <span class="text-2xl font-black text-emerald-600"><span id="labelEficiencia">80</span> <small class="text-sm font-normal text-slate-400">%</small></span>
+                        </div>
+                        <input type="range" min="60" max="95" step="1" value="80" class="slider" id="inputEficiencia" oninput="actualizar()">
+                        <p class="text-[10px] text-slate-400 mt-2">Incluye pérdidas por calor, inversor y cableado</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: Resultados -->
+            <div class="space-y-6">
+
+                <!-- Resultado principal -->
+                <div class="bg-slate-900 p-10 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-3xl"></div>
+                    <p class="text-emerald-400 text-[10px] font-black uppercase tracking-[0.2em] mb-4">Paneles necesarios</p>
+                    <div class="flex items-baseline gap-3 mb-2">
+                        <span class="text-8xl font-black tracking-tighter text-white" id="resPaneles">—</span>
+                        <span class="text-emerald-400 font-bold text-lg">paneles</span>
+                    </div>
+                    <p class="text-slate-400 text-xs mb-8" id="resDescripcion">Ingresa tu ciudad para calcular</p>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Potencia total</span>
+                            <span class="text-lg font-black"><span id="resPotenciaTotal">—</span> <small class="text-xs opacity-50 font-normal">kW</small></span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Energía diaria</span>
+                            <span class="text-lg font-black"><span id="resEnergiaDia">—</span> <small class="text-xs opacity-50 font-normal">kWh</small></span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Área estimada</span>
+                            <span class="text-lg font-black"><span id="resArea">—</span> <small class="text-xs opacity-50 font-normal">m²</small></span>
+                        </div>
+                        <div class="bg-white/5 border border-white/10 p-4 rounded-2xl text-center">
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Sol en tu zona</span>
+                            <span class="text-lg font-black"><span id="resHSP">—</span> <small class="text-xs opacity-50 font-normal">HSP</small></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visualización de paneles -->
+                <div class="bg-white p-6 rounded-[2.5rem] shadow-sm border border-slate-200">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest text-center mb-4">Representación visual de tu instalación</p>
+                    <div id="panelGrid" class="panel-grid min-h-[80px] items-center justify-center">
+                        <p class="text-slate-300 text-xs">Calculando...</p>
+                    </div>
+                </div>
+
+                <!-- Recomendación de panel -->
+                <div id="recomendacionBox" class="hidden bg-emerald-50 border border-emerald-100 p-6 rounded-3xl">
+                    <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">💡 Recomendación</p>
+                    <p id="recomendacionTexto" class="text-sm text-slate-600 leading-relaxed"></p>
+                    <a href="productos.html" class="inline-block mt-4 text-[10px] font-bold text-emerald-700 py-2 px-4 bg-emerald-100 rounded-lg hover:bg-emerald-200 transition uppercase tracking-widest">
+                        Ver paneles disponibles →
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sección explicativa para SEO -->
+        <section class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm mb-12">
+            <h2 class="text-xl font-extrabold text-slate-800 mb-4">¿Cómo se calcula la cantidad de paneles solares?</h2>
+            <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                El número de <strong>paneles solares necesarios</strong> depende de tres factores: tu <strong>consumo mensual en kWh</strong>, las <strong>horas de sol pico (HSP)</strong> disponibles en tu ciudad, y la <strong>potencia de cada panel</strong>. La fórmula básica es:
+            </p>
+            <div class="bg-slate-50 rounded-2xl p-5 text-center mb-4">
+                <code class="text-sm font-bold text-emerald-700">Nº paneles = Consumo diario (kWh) ÷ (HSP × Potencia del panel × Eficiencia)</code>
+            </div>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                Nuestra calculadora obtiene las horas de sol de tu ciudad en tiempo real usando datos meteorológicos, para darte el resultado más preciso posible.
+            </p>
+        </section>
+
+        <!-- FAQ visible -->
+        <section class="mb-12 max-w-3xl mx-auto">
+            <h2 class="text-xl font-extrabold text-slate-800 mb-6 text-center">Preguntas Frecuentes</h2>
+            <div class="space-y-4">
+                <details class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                    <summary class="font-bold text-slate-700 text-sm cursor-pointer">¿Cuántos paneles solares necesito para mi casa?</summary>
+                    <p class="text-slate-500 text-sm mt-3 leading-relaxed">Depende de tu consumo y ubicación. Un hogar típico con 300 kWh/mes y 5 horas de sol necesita entre 4 y 6 paneles de 400W. Usa la calculadora arriba para tu caso exacto.</p>
+                </details>
+                <details class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                    <summary class="font-bold text-slate-700 text-sm cursor-pointer">¿Qué es HSP (Horas de Sol Pico)?</summary>
+                    <p class="text-slate-500 text-sm mt-3 leading-relaxed">Son las horas equivalentes de radiación solar máxima (1000 W/m²) en un día. Una ciudad con 5 HSP recibe la misma energía solar que si tuviera 5 horas de sol perfecto. A mayor HSP, menos paneles necesitas.</p>
+                </details>
+                <details class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+                    <summary class="font-bold text-slate-700 text-sm cursor-pointer">¿Cuánto espacio ocupan los paneles solares?</summary>
+                    <p class="text-slate-500 text-sm mt-3 leading-relaxed">Un panel solar de 400W ocupa aproximadamente 2 m². Si necesitas 6 paneles, necesitarás unos 12 m² de techo libre sin sombras.</p>
+                </details>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="bg-emerald-600 rounded-[3rem] p-10 text-center text-white shadow-2xl shadow-emerald-200">
+            <h2 class="text-2xl font-black mb-3">¿Ya sabes cuántos paneles necesitas?</h2>
+            <p class="opacity-90 text-sm mb-6">Encuentra los mejores equipos al mejor precio en nuestra tienda</p>
+            <a href="productos.html" class="inline-block bg-white text-emerald-700 font-black px-8 py-4 rounded-2xl hover:bg-emerald-50 transition text-sm uppercase tracking-widest shadow-lg mr-4">
+                Ver Productos →
+            </a>
+            <a href="index.html" class="inline-block border-2 border-white text-white font-black px-8 py-4 rounded-2xl hover:bg-white/10 transition text-sm uppercase tracking-widest">
+                Calcular Ahorro →
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="py-10 text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em]">
+        <p>© 2026 SolarSave — Calculadora de Paneles Solares. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        let hspActual = 4.5;
+        let ciudadActual = "";
+
+        // ─── UBICACIÓN ───────────────────────────────────────────
+        async function buscarCiudad() {
+            const ciudad = document.getElementById('inputCiudad').value.trim();
+            if (!ciudad) return;
+            document.getElementById('displayCoords').innerText = "Buscando...";
+            try {
+                const geoRes = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(ciudad)}&count=1&language=es&format=json`);
+                const geoData = await geoRes.json();
+                if (geoData.results?.length > 0) {
+                    const r = geoData.results[0];
+                    await cargarHSP(r.latitude, r.longitude, r.name);
+                } else {
+                    document.getElementById('displayCoords').innerText = "Ciudad no encontrada.";
+                }
+            } catch (e) { document.getElementById('displayCoords').innerText = "Error de conexión."; }
+        }
+
+        function usarGPS() {
+            document.getElementById('displayCoords').innerText = "Pidiendo GPS...";
+            navigator.geolocation.getCurrentPosition(
+                pos => cargarHSP(pos.coords.latitude, pos.coords.longitude, "Mi Ubicación"),
+                () => { document.getElementById('displayCoords').innerText = "GPS falló. Usa el buscador."; },
+                { timeout: 10000 }
+            );
+        }
+
+        async function cargarHSP(lat, lon, nombre) {
+            ciudadActual = nombre;
+            document.getElementById('displayCoords').innerText = `${nombre} (${lat.toFixed(2)}, ${lon.toFixed(2)})`;
+            document.getElementById('displayCoords').classList.add('text-emerald-600');
+            try {
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=shortwave_radiation_sum&timezone=auto`);
+                const data = await res.json();
+                hspActual = parseFloat((data.daily.shortwave_radiation_sum[0] / 3.6).toFixed(1));
+
+                // Mostrar HSP box
+                document.getElementById('hspValor').innerText = hspActual;
+                document.getElementById('hspBox').classList.remove('hidden');
+
+                actualizar();
+            } catch (e) {
+                document.getElementById('displayCoords').innerText = "Error al obtener datos solares.";
+            }
+        }
+
+        // ─── CÁLCULO PRINCIPAL ────────────────────────────────────
+        function actualizar() {
+            const consumoMes = parseFloat(document.getElementById('inputConsumo').value);
+            const potenciaW  = parseFloat(document.getElementById('inputPotencia').value);
+            const eficiencia = parseFloat(document.getElementById('inputEficiencia').value) / 100;
+
+            document.getElementById('labelConsumo').innerText   = consumoMes.toLocaleString();
+            document.getElementById('labelPotencia').innerText  = potenciaW;
+            document.getElementById('labelEficiencia').innerText = Math.round(eficiencia * 100);
+
+            if (!hspActual || hspActual <= 0) return;
+
+            const consumoDia   = consumoMes / 30;                               // kWh/día
+            const potenciaKW   = potenciaW / 1000;                              // kW por panel
+            const energiaPorPanel = potenciaKW * hspActual * eficiencia;        // kWh/día por panel
+            const numPaneles   = Math.ceil(consumoDia / energiaPorPanel);
+            const potenciaTotal = ((numPaneles * potenciaKW)).toFixed(1);
+            const energiaTotal  = (numPaneles * energiaPorPanel).toFixed(1);
+            const areaPaneles   = (numPaneles * 2).toFixed(0);                  // ~2m² por panel
+
+            // Actualizar resultados
+            document.getElementById('resPaneles').innerText      = numPaneles;
+            document.getElementById('resPotenciaTotal').innerText = potenciaTotal;
+            document.getElementById('resEnergiaDia').innerText    = energiaTotal;
+            document.getElementById('resArea').innerText          = areaPaneles;
+            document.getElementById('resHSP').innerText           = hspActual;
+            document.getElementById('resDescripcion').innerText   =
+                `Para cubrir ${consumoMes} kWh/mes en ${ciudadActual || "tu zona"} con ${hspActual} HSP`;
+
+            // Visualización de paneles
+            renderPaneles(numPaneles);
+
+            // Recomendación
+            mostrarRecomendacion(numPaneles, potenciaW, hspActual);
+        }
+
+        function renderPaneles(n) {
+            const grid = document.getElementById('panelGrid');
+            grid.innerHTML = '';
+            const max = Math.min(n, 40); // máximo 40 íconos visual
+            for (let i = 0; i < max; i++) {
+                const div = document.createElement('div');
+                div.innerHTML = '🟦';
+                div.style.fontSize = n <= 10 ? '28px' : n <= 20 ? '22px' : '16px';
+                div.title = `Panel ${i + 1}`;
+                grid.appendChild(div);
+            }
+            if (n > 40) {
+                const extra = document.createElement('span');
+                extra.className = 'text-xs text-slate-400 font-bold w-full text-center mt-2';
+                extra.innerText = `+ ${n - 40} paneles más`;
+                grid.appendChild(extra);
+            }
+        }
+
+        function mostrarRecomendacion(n, potW, hsp) {
+            const box = document.getElementById('recomendacionBox');
+            const txt = document.getElementById('recomendacionTexto');
+            box.classList.remove('hidden');
+
+            let mensaje = '';
+            if (hsp >= 5.5) {
+                mensaje = `Tu zona tiene excelente radiación solar (${hsp} HSP). Con ${n} paneles de ${potW}W tendrás energía suficiente. Puedes considerar paneles monocristalinos de alta eficiencia para reducir el espacio necesario.`;
+            } else if (hsp >= 4) {
+                mensaje = `Tu zona tiene buena radiación solar (${hsp} HSP). Se recomiendan ${n} paneles de ${potW}W. Los paneles policristalinos son una opción económica para esta zona.`;
+            } else {
+                mensaje = `Tu zona tiene radiación solar moderada (${hsp} HSP). Necesitarás ${n} paneles de ${potW}W. Considera paneles de alta eficiencia para maximizar la producción en días nublados.`;
+            }
+            txt.innerText = mensaje;
+        }
+
+        // Activar input con Enter en el campo de ciudad
+        document.getElementById('inputCiudad').addEventListener('keydown', e => {
+            if (e.key === 'Enter') buscarCiudad();
+        });
+
+        // Activar sliders
+        ['inputConsumo', 'inputPotencia', 'inputEficiencia'].forEach(id => {
+            document.getElementById(id).addEventListener('input', actualizar);
+        });
+    </script>
+
+</body>
+</html>
