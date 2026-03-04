@@ -58,26 +58,28 @@
         <p class="text-center text-slate-500 text-sm mb-14">Los mejores equipos solares al mejor precio — selección curada en AliExpress</p>
 
         <div id="catalogo">
+            <!-- Skeleton loader -->
             <div class="space-y-16">
                 <div>
                     <div class="skeleton h-8 w-48 mb-8"></div>
                     <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-5">
-                        <div class="skeleton h-64"></div><div class="skeleton h-64"></div>
-                        <div class="skeleton h-64"></div><div class="skeleton h-64"></div>
-                        <div class="skeleton h-64"></div>
+                        <div class="skeleton h-72"></div><div class="skeleton h-72"></div>
+                        <div class="skeleton h-72"></div><div class="skeleton h-72"></div>
+                        <div class="skeleton h-72"></div>
                     </div>
                 </div>
                 <div>
                     <div class="skeleton h-8 w-64 mb-8"></div>
                     <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-5">
-                        <div class="skeleton h-64"></div><div class="skeleton h-64"></div>
-                        <div class="skeleton h-64"></div><div class="skeleton h-64"></div>
-                        <div class="skeleton h-64"></div>
+                        <div class="skeleton h-72"></div><div class="skeleton h-72"></div>
+                        <div class="skeleton h-72"></div><div class="skeleton h-72"></div>
+                        <div class="skeleton h-72"></div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- CTA -->
         <section class="bg-emerald-600 rounded-[3rem] p-10 text-center text-white shadow-2xl shadow-emerald-200 mb-8 mt-16">
             <h2 class="text-2xl font-black mb-3">¿Cuántos paneles necesitas?</h2>
             <p class="opacity-90 text-sm mb-6">Usa nuestra calculadora inteligente basada en tu ubicación y consumo</p>
@@ -104,7 +106,7 @@
         //  5. Esta página se actualiza sola ✅
         //
         //  Columnas del CSV (no cambiar el orden ni los nombres):
-        //  categoria | emoji | subtitulo | titulo | descripcion | imagen | url
+        //  categoria | emoji | subtitulo | titulo | descripcion | precio | imagen | url
         // ─────────────────────────────────────────────────────
 
         function parseCSV(text) {
@@ -166,6 +168,11 @@
                 `;
                 const grid = section.querySelector('.grid');
                 cat.productos.forEach(p => {
+                    // Badge de precio: verde si tiene precio, gris si está vacío
+                    const precioBadge = p.precio
+                        ? `<span class="inline-block bg-emerald-50 text-emerald-700 font-black text-sm px-3 py-1 rounded-xl mb-3">${p.precio}</span>`
+                        : `<span class="inline-block bg-slate-100 text-slate-400 font-bold text-xs px-3 py-1 rounded-xl mb-3">Sin precio</span>`;
+
                     const card = document.createElement('div');
                     card.className = 'bg-white rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition p-5 flex flex-col items-center text-center';
                     card.innerHTML = `
@@ -174,7 +181,8 @@
                                  onerror="this.src='https://placehold.co/200x128/f1f5f9/94a3b8?text=Sin+imagen'">
                         </div>
                         <h3 class="font-bold text-slate-700 text-sm mb-1">${p.titulo}</h3>
-                        <p class="text-xs text-slate-400 mb-4 leading-relaxed">${p.descripcion}</p>
+                        <p class="text-xs text-slate-400 mb-3 leading-relaxed">${p.descripcion}</p>
+                        ${precioBadge}
                         <a href="${p.url}" target="_blank" rel="nofollow sponsored"
                            class="mt-auto inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">
                             Ver en AliExpress
