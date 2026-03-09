@@ -4,31 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Calculadora Solar Gratis | Ahorro Energético e Inversión | SolarSave</title>
-    <meta name="description" content="Calcula cuánto ahorras con paneles solares según tu factura de luz. Descubre el período de retorno de tu inversión solar con datos de radiación real.">
+    <title>Calculadora Solar Gratis | Paneles Solares Baratos AliExpress | SolarSave</title>
+    <meta name="description" content="Calcula gratis cuánto ahorras con paneles solares según tu factura de luz y ubicación. Descubre el período de retorno de tu inversión solar y compra equipos baratos en AliExpress.">
+    <meta name="keywords" content="calculadora solar, paneles solares baratos, ahorro solar, periodo de retorno solar, paneles solares aliexpress, kit solar, energia solar, iluminacion solar">
 
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "¿Cómo calculo el ahorro con paneles solares?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Solo necesitas tu gasto mensual y tu ubicación. Usamos datos de radiación (HSP) para estimar tu ahorro anual y el retorno de inversión."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "¿Es rentable la energía solar hoy?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Sí, con el aumento de tarifas, el retorno de inversión promedio se sitúa entre 3 y 6 años en la mayoría de las regiones."
-          }
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "¿Cómo calculo el ahorro con paneles solares?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ingresa tu gasto mensual y ubicación. Usamos datos de radiación real para calcular tu ahorro y el tiempo de recuperación de inversión."
         }
-      ]
+      }]
     }
     </script>
 
@@ -53,8 +44,8 @@
     </nav>
 
     <main class="max-w-5xl mx-auto px-4 py-12">
-        <h1 class="text-center text-3xl font-black text-slate-800 mb-2">Calculadora de Ahorro Solar Gratis</h1>
-        <p class="text-center text-slate-500 mb-10 text-sm">Maximiza tu eficiencia energética con datos precisos de radiación solar</p>
+        <h1 class="text-center text-3xl font-black text-slate-800 mb-2 italic uppercase tracking-widest">SolarSave</h1>
+        <p class="text-center text-slate-500 mb-10 text-sm">Calculadora de ahorro solar inteligente</p>
 
         <div class="grid lg:grid-cols-2 gap-12 mb-20">
             <div class="space-y-8">
@@ -64,11 +55,11 @@
                     <div class="mb-10 p-6 bg-slate-50 rounded-[2rem] border border-slate-100">
                         <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest block mb-3">Ubicación para Radiación (HSP)</label>
                         <div class="flex gap-2 mb-4">
-                            <input type="text" id="inputCiudad" placeholder="Ej: Buenos Aires, Madrid..." class="flex-1 p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-bold shadow-sm">
+                            <input type="text" id="inputCiudad" placeholder="Ej: Buenos Aires, Ciudad de México..." class="flex-1 p-3 rounded-xl border border-slate-200 outline-none focus:ring-2 focus:ring-emerald-500 text-sm font-bold shadow-sm">
                             <button onclick="buscarPorCiudad()" class="bg-slate-900 text-white px-5 py-3 rounded-xl hover:bg-black transition">🔍</button>
                         </div>
                         <div class="flex items-center justify-between border-t border-slate-200 pt-4">
-                            <button onclick="obtenerUbicacion()" class="text-[10px] font-bold text-emerald-600 uppercase tracking-tight">📍 Usar mi GPS</button>
+                            <button onclick="obtenerUbicacion()" class="text-[10px] font-bold text-emerald-600 uppercase tracking-tight flex items-center gap-1">📍 Usar mi GPS</button>
                             <div id="displayCoords" class="text-[10px] font-mono text-slate-400 italic">Esperando ubicación...</div>
                         </div>
                     </div>
@@ -82,7 +73,7 @@
                             <input type="range" min="20" max="2000" value="150" class="slider" id="inputGasto">
                         </div>
                         <div>
-                            <div class="flex justify-between mb-4">
+                            <div class="flex justify-between mb-4 text-sm">
                                 <span class="text-sm font-bold text-slate-400 uppercase tracking-widest">Radiación Solar</span>
                                 <span class="text-2xl font-black text-emerald-600"><span id="labelSol">4.5</span> <small class="text-slate-400 font-normal">HSP</small></span>
                             </div>
@@ -100,11 +91,11 @@
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-white/5 border border-white/10 p-5 rounded-3xl text-center">
-                            <span class="text-slate-400 text-[10px] font-bold uppercase block mb-1">Retorno</span>
-                            <span class="text-2xl font-bold"><span id="resROI">0</span> <small class="text-xs opacity-50">años</small></span>
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Retorno</span>
+                            <span class="text-2xl font-bold"><span id="resROI">0</span> <small class="text-xs opacity-50 font-normal">años</small></span>
                         </div>
                         <div class="bg-white/5 border border-white/10 p-5 rounded-3xl text-center">
-                            <span class="text-slate-400 text-[10px] font-bold uppercase block mb-1">Anual</span>
+                            <span class="block text-slate-400 text-[10px] font-bold uppercase mb-1">Anual</span>
                             <span class="text-2xl font-bold">$<span id="resAhorroAnual">0</span></span>
                         </div>
                     </div>
@@ -115,26 +106,63 @@
             </div>
         </div>
 
-        <section class="mb-16 bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
-            <h2 class="text-xl font-extrabold text-slate-800 mb-4 text-center">Inversión y Ahorro con Energía Solar</h2>
-            <p class="text-slate-600 text-sm leading-relaxed mb-4">
-                En un contexto de aumento constante de tarifas eléctricas, los <strong>paneles solares</strong> son la inversión más segura para reducir gastos. Nuestra calculadora utiliza datos satelitales de <strong>Horas de Sol Pico (HSP)</strong> para ofrecerte un diagnóstico preciso basado en la radiación real de tu zona.
-            </p>
-            <p class="text-slate-600 text-sm leading-relaxed text-center">
-                Visualiza el punto de equilibrio donde tu inversión se amortiza y comienza a generar ganancias puras para tu hogar o empresa.
+        <section class="mb-20 text-center max-w-4xl mx-auto px-4">
+            <h2 class="text-xl font-extrabold text-slate-800 mb-4">Eficiencia Financiera con Energía Solar</h2>
+            <p class="text-slate-600 text-sm leading-relaxed">
+                Nuestra calculadora utiliza datos de <strong>Horas de Sol Pico (HSP)</strong> para proyectar el ahorro real y el punto de equilibrio de tu inversión. Descubre cómo amortizar el costo inicial y empezar a generar ganancias puras para tu hogar.
             </p>
         </section>
 
-        </main>
+        <section class="mb-20">
+            <h2 class="text-[12px] font-black text-center mb-8 italic text-slate-400 uppercase tracking-[0.3em]">Equipamiento Recomendado</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-center">
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <img src="https://m.media-amazon.com/images/I/71YvU1XF1LL._AC_SL1500_.jpg" alt="Iluminación" class="h-32 mx-auto mb-4 object-contain">
+                    <h3 class="font-bold text-slate-700 text-sm mb-2">Iluminación Solar</h3>
+                    <a href="https://s.click.aliexpress.com/e/_DmM9x2X" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en AliExpress</a>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <img src="https://m.media-amazon.com/images/I/61m9fP9y3rL._AC_SL1500_.jpg" alt="Energía" class="h-32 mx-auto mb-4 object-contain">
+                    <h3 class="font-bold text-slate-700 text-sm mb-2">Estación de Energía</h3>
+                    <a href="https://s.click.aliexpress.com/e/_DEmXzYV" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en AliExpress</a>
+                </div>
+                <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-md transition">
+                    <img src="https://m.media-amazon.com/images/I/71Xm3z8eBfL._AC_SL1500_.jpg" alt="Panel" class="h-32 mx-auto mb-4 object-contain">
+                    <h3 class="font-bold text-slate-700 text-sm mb-2">Kit Panel 100W</h3>
+                    <a href="https://s.click.aliexpress.com/e/_Dl0YhK5" target="_blank" class="inline-block text-[10px] font-bold text-emerald-600 py-2 px-4 border border-emerald-100 rounded-lg hover:bg-emerald-50 transition uppercase tracking-widest">Ver en AliExpress</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-20 bg-emerald-50 p-8 rounded-[2.5rem] border border-emerald-100 text-center">
+            <h2 class="text-xl font-extrabold text-emerald-800 mb-4">Calculador de Paneles para tu Kit</h2>
+            <p class="text-emerald-700 text-sm mb-8">Obtén una recomendación directa de equipos según tu necesidad energética calculada.</p>
+            <a href="https://s.click.aliexpress.com/e/_DCm2X9L" target="_blank" class="bg-emerald-600 text-white px-8 py-4 rounded-2xl font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-xl inline-block">Ver Kit Recomendado en AliExpress</a>
+        </section>
+
+        <section id="contacto" class="bg-emerald-600 rounded-[3.5rem] p-12 text-center max-w-4xl mx-auto text-white shadow-2xl">
+            <h2 class="text-3xl font-black mb-4 italic uppercase">¿Quieres una instalación real?</h2>
+            <p class="mb-10 opacity-90 font-medium">Recibe presupuestos de instaladores certificados.</p>
+            <form action="https://formspree.io/f/mqaeloze" method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <input type="text" name="name" placeholder="Nombre completo" required class="p-5 rounded-2xl text-slate-900 outline-none">
+                <input type="email" name="email" placeholder="Email de contacto" required class="p-5 rounded-2xl text-slate-900 outline-none">
+                <input type="text" name="ciudad" placeholder="Ciudad y País" required class="md:col-span-2 p-5 rounded-2xl text-slate-900 outline-none">
+                <button type="submit" class="md:col-span-2 bg-slate-900 text-white font-black py-5 rounded-2xl hover:bg-black transition shadow-xl uppercase tracking-widest text-sm">Solicitar Estudio Gratuito</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="py-12 text-center text-slate-400 text-[10px] font-bold uppercase tracking-[0.4em]">
+        <p>© 2026 SolarSave. Todos los derechos reservados.</p>
+    </footer>
 
     <script>
-        // Tu lógica original de cálculo se mantiene intacta
         const inputGasto = document.getElementById('inputGasto');
         const inputSol = document.getElementById('inputSol');
         const displayCoords = document.getElementById('displayCoords');
         let chart;
 
-        // Función nueva para evitar el error de "Timeout" del GPS
+        // ✅ Lógica de buscador recuperada y funcional
         async function buscarPorCiudad() {
             const ciudad = document.getElementById('inputCiudad').value;
             if (!ciudad) return;
@@ -149,17 +177,17 @@
                     displayCoords.innerText = `${data[0].display_name.split(',')[0]} (📍 ${lat.toFixed(2)})`;
                     calcular();
                 } else { displayCoords.innerText = "No encontrada."; }
-            } catch (e) { displayCoords.innerText = "Error de API."; }
+            } catch (e) { displayCoords.innerText = "Error API."; }
         }
 
         function obtenerUbicacion() {
             displayCoords.innerText = "Pidiendo GPS...";
             navigator.geolocation.getCurrentPosition(
                 (pos) => {
-                    displayCoords.innerText = `Ubicación detectada (📍 ${pos.coords.latitude.toFixed(2)})`;
+                    displayCoords.innerText = `Ubicación (📍 ${pos.coords.latitude.toFixed(2)})`;
                     calcular();
                 },
-                (err) => { displayCoords.innerText = "GPS falló. Usa el buscador."; },
+                (err) => { displayCoords.innerText = "GPS falló. Usa la lupa."; },
                 { timeout: 5000 }
             );
         }
