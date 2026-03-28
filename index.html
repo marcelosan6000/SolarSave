@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SolarSave | Calculadora de Ahorro Fotovoltaico y Retorno de Inversión</title>
-    <meta name="description" content="Calcula con precisión técnica el ahorro solar basado en irradiancia satelital (HSP) y análisis de retorno de inversión (ROI) para sistemas fotovoltaicos en 2026.">
+    <title>Calculadora Solar Gratis: Ahorra en tu Recibo de Luz | SolarSave</title>
+    <meta name="description" content="Calcula en 30 segundos cuántos paneles solares necesitas para dejar de pagar luz. Obtén tu ahorro real y retorno de inversión en toda Latinoamérica. ¡Úsala gratis!">
     <meta name="keywords" content="calculadora solar, energía fotovoltaica, ahorro luz, ROI solar, paneles solares, eficiencia energética, HSP">
     <link rel="canonical" href="https://marcelosan6000.github.io/solarsave/">
 
@@ -170,9 +170,9 @@
                     <div class="pt-6 border-t border-slate-100 text-center">
                         <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-3">Selecciona tu moneda</label>
                         <select id="currencySelector" onchange="calcular()" class="w-full bg-slate-50 border border-slate-200 text-sm font-bold rounded-xl px-4 py-3 outline-none text-center">
+                            <option value="MXN" data-symbol="$" data-kwh="3.50">Peso Mexicano (MXN) - 3.50/kWh</option>
                             <option value="USD" data-symbol="$" data-kwh="0.15">Dólar (USD) - 0.15/kWh</option>
                             <option value="EUR" data-symbol="€" data-kwh="0.25">Euro (EUR) - 0.25/kWh</option>
-                            <option value="MXN" data-symbol="$" data-kwh="3.50">Peso Mexicano (MXN) - 3.50/kWh</option>
                             <option value="ARS" data-symbol="$" data-kwh="0.08">Peso Argentino (ARS) - 0.08/kWh</option>
                         </select>
                     </div>
@@ -204,6 +204,35 @@
                 </div>
             </section>
         </div>
+
+        <section class="max-w-4xl mx-auto mb-20 px-6">
+    <div class="bg-emerald-50 border-l-4 border-emerald-500 p-8 rounded-2xl">
+        <h2 class="text-2xl font-black text-slate-800 mb-4 tracking-tight">¿Cómo funciona nuestra calculadora de paneles solares?</h2>
+        <p class="text-slate-600 leading-relaxed mb-4">
+            Nuestra herramienta utiliza datos de <strong>irradiancia satelital en tiempo real</strong> para determinar cuánta energía puede generar un sistema fotovoltaico en tu ubicación exacta. No todas las regiones reciben la misma cantidad de luz; por eso, calculamos las <strong>Horas de Sol Pico (HSP)</strong> específicas para tu ciudad.
+        </p>
+        <div class="grid md:grid-cols-3 gap-6 mt-8">
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <span class="text-emerald-500 font-bold text-xl block mb-2">01.</span>
+                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Consumo Energético</p>
+                <p class="text-sm text-slate-600">Analizamos tu gasto mensual actual para dimensionar el sistema necesario.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <span class="text-emerald-500 font-bold text-xl block mb-2">02.</span>
+                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Potencia Fotovoltaica</p>
+                <p class="text-sm text-slate-600">Calculamos el número de paneles de alta eficiencia (N-Type) requeridos.</p>
+            </div>
+            <div class="bg-white p-4 rounded-xl shadow-sm">
+                <span class="text-emerald-500 font-bold text-xl block mb-2">03.</span>
+                <p class="text-xs font-bold text-slate-400 uppercase mb-2">Retorno de Inversión</p>
+                <p class="text-sm text-slate-600">Estimamos en cuántos años recuperarás tu inversión gracias al ahorro en el recibo de luz.</p>
+            </div>
+        </div>
+        <p class="text-slate-500 text-sm mt-8 italic text-center">
+            *Optimizado para usuarios en México, Argentina, Colombia y España con tarifas actualizadas a 2026.
+        </p>
+    </div>
+</section>
 
         <section class="max-w-4xl mx-auto mb-24 px-4">
             <h2 class="text-center text-2xl font-black text-slate-800 mb-12 uppercase tracking-widest">Preguntas Técnicas Frecuentes</h2>
